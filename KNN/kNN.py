@@ -24,10 +24,16 @@ class KNNClassifier:
         return np.array(y_predict)
 
     def _predict(self, x):
-
-        distance = [sqrt(np.sum(x_train - x) ** 2) for x_train in self._X_train]
+        # 给定带测数据x，返回x的预测结果值
+        distance = [sqrt(np.sum((x_train - x) ** 2)) for x_train in self._X_train]
         nearest = np.argsort(distance)
-        topK_y = [self._y_train[0] for i in nearest[:self.k]]
+        topK_y = [self._y_train[i] for i in nearest[:self.  k]]
         votes = Counter(topK_y)
 
         return votes.most_common(1)[0][0]
+
+    def score(self, x_test, y_test):
+        '''根据meshing数据集新x_test 和 y_test确定模型准确度'''
+        y_predict = self.predict(x_test)
+        acc = sum(y_predict == y_test)/len(y_test)
+        return acc
